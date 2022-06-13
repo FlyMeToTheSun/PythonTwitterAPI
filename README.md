@@ -1,4 +1,4 @@
-Assignment 1.2
+### Assignment 1.2
 Download at least 20 tweets from Twitter and do some pre-processing techniques such as, but not limited to:
 - Tokenization;
 - Lemmatization;
@@ -15,7 +15,8 @@ Also, you may refer to the processes in this site: https://swatimeena989.medium.
 
 Upload file in PDF Format.
 
-Assignment 2 (M1) Final Output
-Kindly submit the Final Output of Assignment 1.2 on this link.
-The full code. Include a short analysis based on your output. (Why does the model derive this score?)
-Upload file in PDF Format.
+### Assignment 2 (M1) Final Output
+- Kindly submit the Final Output of Assignment 1.2 on this link.
+- The full code. Include a short analysis based on your output. (Why does the model derive this score?)
+- Upload file in PDF Format.
+- https://towardsdatascience.com/creating-the-twitter-sentiment-analysis-program-in-python-with-naive-bayes-classification-672e5589a7ed
