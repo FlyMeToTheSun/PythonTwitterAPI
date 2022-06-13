@@ -18,4 +18,4 @@ Upload file in PDF Format.
 Assignment 2 (M1) Final Output
 Kindly submit the Final Output of Assignment 1.2 on this link.
 The full code. Include a short analysis based on your output. (Why does the model derive this score?)
-Upload file in PDF Format. 
+Upload file in PDF Format.
