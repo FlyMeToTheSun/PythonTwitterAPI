@@ -20,7 +20,7 @@ twitter_API = twitter.Api(consumer_key='5HwCJo0YmNDrtagqmwoz5DQkg',
                       access_token_secret='MuSZpaTkHxFuAvsL8WtVQfkRGPSMPJeI7rIsbnZwfIaCJ')
 
 # BUILDING TEST SET
-"""
+
 def buildTestSet(search_keyword):
     try:
         tweets_fetched = twitter_API.GetSearch(search_keyword, count = 20)
@@ -41,7 +41,7 @@ def buildTestSet(search_keyword):
 
 testDataFile = "output/testDataFile.csv"
 testDataSet = buildTestSet("smile")
-"""
+
 
 
 #print(testDataSet[0:4])
@@ -50,15 +50,10 @@ testDataSet = buildTestSet("smile")
 # BUILDING TRAINING SET
 
 
-# Gettin from Training SET
-import pandas as pd
-df = pd.read_csv("output/tweetDataFile-100.csv", delimiter=',')
-trainingDataSet = [list(row) for row in df.values]
-
-print(trainingDataSet)
 
 # Pre-processing Tweets in The Data Sets
-
+import json
+import ast
 class PreProcessTweets:
     def __init__(self):
         self._stopwords = set(stopwords.words('english') + list(punctuation) + ['AT_USER','URL'])
@@ -81,11 +76,22 @@ class PreProcessTweets:
 
     def processTweets(self, list_of_tweets):
         processedTweets=[]
+        #for line in list_of_tweets:
+        #    processedTweets.append((self._processTweet(line['text']), line['label']))
 
-        for tweet in list_of_tweets:
-            processedTweets.append((self._processTweet(tweet['text']), tweet['label']))
-            print(processedTweets)
+        file = open('output/tweetDataFile-100.csv', 'r', encoding="utf-8",)
+        lines = file.readlines()
+
+        for index, line in enumerate(lines):
+            if line.strip():
+                stripped_line = (line.strip())
+                stripped_line = list(stripped_line.split(","))
+
+                processedTweets.append((self._processTweet(stripped_line[1]), stripped_line[2]))
+                print(stripped_line)
+        print(processedTweets)
         return processedTweets
+
 
     def _processTweet(self, tweet):
         tweet = tweet.lower() # convert text to lower-case
@@ -97,19 +103,23 @@ class PreProcessTweets:
         #return tweet_result
         return [word for word in tweet if word not in self._stopwords]
 
+with open('output/tweetDataFile-100.txt', 'r', encoding="utf-8",) as f:
+    trainingDataSet = f.read( )
+
+print(trainingDataSet)
 
 tweetProcessor = PreProcessTweets()
 preprocessedTestSetFile = "output/preprocessedTestSetFile.csv"
 preprocessedTrainingSetFile = "output/preprocessedTrainingSetFile.csv"
-
+#print(testDataSet)
+#print(trainingDataSet)
 
 preprocessedTestSet = tweetProcessor.processTweets(trainingDataSet)
+#preprocessedTestSet = tweetProcessor.processTweets(testDataSet)
 preprocessedTestSet = str(preprocessedTestSet)
-with open('output/preprocessedTestSetFile.txt', 'w', encoding="utf-8") as f:
-    f.write(preprocessedTestSet)
 
-
-#preprocessedTrainingSet = tweetProcessor.processTweets(trainingDataSet)
+#with open('output/preprocessedTestSetFile.txt', 'w', encoding="utf-8") as f:
+#    f.write(preprocessedTestSet)
 
 """
 # Naive Bayes Classifier

@@ -28,7 +28,7 @@ def buildTrainingSet(corpusFile, tweetDataFile):
             corpus.append({"tweet_id":row[2], "label":row[1], "topic":row[0]})
 
     rate_limit = 180
-    sleep_time = 5
+    sleep_time = 1
 
     #rate_limit = 10
     #sleep_time = 20/10
@@ -48,16 +48,16 @@ def buildTrainingSet(corpusFile, tweetDataFile):
     # now we write them to the empty CSV file
     with open(tweetDataFile,'w', encoding="utf-8") as csvfile:
         linewriter = csv.writer(csvfile,delimiter=',',quotechar="\"")
-        for tweet in trainingDataSet:
-            try:
-                #linewriter.writerow([tweet["tweet_id"], tweet["text"], tweet["label"], tweet["topic"]])
-                linewriter.writerow([tweet])
+        rows ="tweet_id,text,label,topic"
+        linewriter.writerow(rows)
+        try:
+                linewriter.writerow([tweet["tweet_id"], tweet["text"], tweet["label"], tweet["topic"]])
             except Exception as e:
                 print(e)
         print("successful")
     return trainingDataSet
 
-corpusFile = "output/corpus.csv"
-tweetDataFile = "output/tweetDataFile-raw.csv"
+corpusFile = "output/corpus-100.csv"
+tweetDataFile = "output/tweetDataFile-text.csv"
 
-trainingData = buildTrainingSet(corpusFile, tweetDataFile)
+trainingDataSet = buildTrainingSet(corpusFile, tweetDataFile)
