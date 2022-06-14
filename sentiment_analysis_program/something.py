@@ -20,7 +20,7 @@ twitter_API = twitter.Api(consumer_key='5HwCJo0YmNDrtagqmwoz5DQkg',
                       access_token_secret='MuSZpaTkHxFuAvsL8WtVQfkRGPSMPJeI7rIsbnZwfIaCJ')
 
 # BUILDING TEST SET
-
+"""
 def buildTestSet(search_keyword):
     try:
         tweets_fetched = twitter_API.GetSearch(search_keyword, count = 20)
@@ -41,59 +41,21 @@ def buildTestSet(search_keyword):
 
 testDataFile = "output/testDataFile.csv"
 testDataSet = buildTestSet("smile")
-
+"""
 
 
 #print(testDataSet[0:4])
 
-"""
+
 # BUILDING TRAINING SET
-def buildTrainingSet(corpusFile, tweetDataFile):
-    import csv
-    import time
 
-    corpus = []
 
-    with open(corpusFile,'rt') as csvfile:
-        lineReader = csv.reader(csvfile,delimiter=',', quotechar="\"")
-        for row in lineReader:
-            corpus.append({"tweet_id":row[2], "label":row[1], "topic":row[0]})
+# Gettin from Training SET
+import pandas as pd
+df = pd.read_csv("output/tweetDataFile-100.csv", delimiter=',')
+trainingDataSet = [list(row) for row in df.values]
 
-    rate_limit = 180
-    sleep_time = 5
-
-    #rate_limit = 10
-    #sleep_time = 20/10
-
-    trainingDataSet = []
-
-    for tweet in corpus:
-        try:
-            status = twitter_API.GetStatus(tweet["tweet_id"])
-            print("Tweet fetched" + status.text)
-            tweet["text"] = status.text
-            trainingDataSet.append(tweet)
-            time.sleep(sleep_time)
-        except Exception as e:
-            print(e)
-            continue
-    # now we write them to the empty CSV file
-    with open(tweetDataFile,'w', encoding="utf-8") as csvfile:
-        linewriter = csv.writer(csvfile,delimiter=',',quotechar="\"")
-        for tweet in trainingDataSet:
-            try:
-                linewriter.writerow([tweet["tweet_id"], tweet["text"], tweet["label"], tweet["topic"]])
-            except Exception as e:
-                print(e)
-        print("successful")
-    return trainingDataSet
-
-corpusFile = "output/corpus.csv"
-tweetDataFile = "output/tweetDataFile.csv"
-
-trainingData = buildTrainingSet(corpusFile, tweetDataFile)
-
-"""
+print(trainingDataSet)
 
 # Pre-processing Tweets in The Data Sets
 
@@ -119,18 +81,10 @@ class PreProcessTweets:
 
     def processTweets(self, list_of_tweets):
         processedTweets=[]
+
         for tweet in list_of_tweets:
-            processedTweets.append((self._processTweet(tweet["text"]),tweet["label"]))
-            """
-            processedLineOutput = str((self._processTweet(tweet["text"]),tweet["label"]))
-            with open(preprocessedTestSetFile,'w', encoding="utf-8") as csvfile:
-                writer = csv.writer(csvfile, delimiter=',')
-                try:
-                    writer.writerow(processedLineOutput)
-                except Exception as e:
-                    print(e)
-                print("successful")
-            """
+            processedTweets.append((self._processTweet(tweet['text']), tweet['label']))
+            print(processedTweets)
         return processedTweets
 
     def _processTweet(self, tweet):
@@ -139,34 +93,25 @@ class PreProcessTweets:
         tweet = re.sub('@[^\s]+', 'AT_USER', tweet) # remove usernames
         tweet = re.sub(r'#([^\s]+)', r'\1', tweet) # remove the # in #hashtag
         tweet = word_tokenize(tweet) # remove repeated characters (helloooooooo into hello)
-        tweet_result = [word for word in tweet if word not in self._stopwords]
-        return tweet_result
+        #tweet_result = [word for word in tweet if word not in self._stopwords]
+        #return tweet_result
+        return [word for word in tweet if word not in self._stopwords]
 
 
 tweetProcessor = PreProcessTweets()
 preprocessedTestSetFile = "output/preprocessedTestSetFile.csv"
 preprocessedTrainingSetFile = "output/preprocessedTrainingSetFile.csv"
 
-a_file = open("output/tweetDataFile.csv", "r")
 
-list_of_lists = [(line.strip()).split() for line in a_file]
-
-a_file.close()
-
-print(list_of_lists)
-trainingDataSet = list_of_lists
-
-preprocessedTrainingSet = tweetProcessor.processTweets(trainingDataSet)
-preprocessedTestSet = tweetProcessor.processTweets(testDataSet)
+preprocessedTestSet = tweetProcessor.processTweets(trainingDataSet)
 preprocessedTestSet = str(preprocessedTestSet)
-print(preprocessedTestSet)
-
 with open('output/preprocessedTestSetFile.txt', 'w', encoding="utf-8") as f:
     f.write(preprocessedTestSet)
 
 
+#preprocessedTrainingSet = tweetProcessor.processTweets(trainingDataSet)
 
-
+"""
 # Naive Bayes Classifier
 import nltk
 
@@ -205,3 +150,4 @@ if NBResultLabels.count('positive') > NBResultLabels.count('negative'):
 else:
     print("Overall Negative Sentiment")
     print("Negative Sentiment Percentage = " + str(100*NBResultLabels.count('negative')/len(NBResultLabels)) + "%")
+"""

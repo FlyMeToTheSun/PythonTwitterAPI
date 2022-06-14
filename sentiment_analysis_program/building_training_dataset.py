@@ -50,13 +50,14 @@ def buildTrainingSet(corpusFile, tweetDataFile):
         linewriter = csv.writer(csvfile,delimiter=',',quotechar="\"")
         for tweet in trainingDataSet:
             try:
-                linewriter.writerow([tweet["tweet_id"], tweet["text"], tweet["label"], tweet["topic"]])
+                #linewriter.writerow([tweet["tweet_id"], tweet["text"], tweet["label"], tweet["topic"]])
+                linewriter.writerow([tweet])
             except Exception as e:
                 print(e)
         print("successful")
     return trainingDataSet
 
 corpusFile = "output/corpus.csv"
-tweetDataFile = "output/tweetDataFile.csv"
+tweetDataFile = "output/tweetDataFile-raw.csv"
 
 trainingData = buildTrainingSet(corpusFile, tweetDataFile)
