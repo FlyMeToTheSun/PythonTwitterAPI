@@ -24,13 +24,7 @@ def buildTestSet(search_keyword):
     try:
         tweets_fetched = twitter_API.GetSearch(search_keyword, count = 20)
         dataLine = [{"text":status.text, "label":None} for status in tweets_fetched]
-        with open(testDataFile,'w', encoding="utf-8") as csvfile:
-            linewriter = csv.writer(csvfile,delimiter=',',quotechar="\"")
-            try:
-                linewriter.writerow({"text":status.text, "label":None} for status in tweets_fetched)
-            except Exception as e:
-                print(e)
-            print("Fetched " + str(len(tweets_fetched)) + " tweets for the term " + search_keyword)
+        print("Fetched " + str(len(tweets_fetched)) + " tweets for the term " + search_keyword)
         return dataLine
     except Exception as ex:
         template = "An exception of type {0} occurred. Arguments:\n{1!r}"
@@ -38,7 +32,6 @@ def buildTestSet(search_keyword):
         print (message)
         return None
 
-testDataFile = "testDataFile.csv"
 testDataSet = buildTestSet("apple")
 
 
@@ -113,7 +106,13 @@ class PreProcessTweets:
 
         return tag_dict.get(tag,wordnet.NOUN)
 
-    def processTweet(self, list_of_tweets):
+    def processTestSet(self, list_of_tweets):
+        processedTweets=[]
+        for tweet in list_of_tweets:
+            processedTweets.append((self._processTweet(tweet["text"]),tweet["label"]))
+        return processedTweets
+
+    def processTrainingSet(self, list_of_tweets):
         processedTweets=[]
         file = open(list_of_tweets, 'r', encoding="utf-8",)
         lines = file.readlines()
@@ -149,8 +148,8 @@ class PreProcessTweets:
 trainingDataFile = 'tweetDataFile.csv'
 
 tweetProcessor = PreProcessTweets()
-preprocessedTestSet = tweetProcessor.processTweet(testDataFile)
-preprocessedTrainingSet = tweetProcessor.processTweet(trainingDataFile)
+preprocessedTestSet = tweetProcessor.processTestSet(testDataSet)
+preprocessedTrainingSet = tweetProcessor.processTrainingSet(trainingDataFile)
 
 print("preprocessedTrainingSet = ",preprocessedTrainingSet)
 print("preprocessedTestSet = ", preprocessedTestSet)
@@ -181,7 +180,6 @@ print("trainingFeatures = ", trainingFeatures)
 
 
 NBayesClassifier=nltk.NaiveBayesClassifier.train(trainingFeatures)
-print("NBayesClassifier = ", NBayesClassifier)
 
 
 NBResultLabels = [NBayesClassifier.classify(extract_features(tweet[0])) for tweet in preprocessedTestSet]
@@ -202,8 +200,6 @@ elif ((NBResultLabels.count('positive') < NBResultLabels.count('neutral')) and (
 else:
     print("Overall Irrelevant Sentiment")
 
-
-print("\n")
 print("Sentiment Scores: Positive =" + str(NBResultLabels.count('positive')/len(NBResultLabels))+". Negative = " + str(NBResultLabels.count('negative')/len(NBResultLabels))+".")
 
 #print("Neutral Sentiment Percentage = " + str(100*NBResultLabels.count('neutral')/len(NBResultLabels)) + "%")
