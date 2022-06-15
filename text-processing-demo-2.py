@@ -27,6 +27,7 @@ def get_wordnet_pos(word):
     return tag_dict.get(tag,wordnet.NOUN)
 
 def clean_data(w):
+
     w = unicode_to_ascii(w)
     w=w.lower()                        # Lower casing
     w=re.sub(' +', ' ', w).strip(' ')  # Remove multiple whitespaces, also leading and trailing whitespaces

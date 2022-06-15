@@ -1,5 +1,0 @@
-tweet_id,text,label,topic
-126415614616154112,Now all @Apple has to do is get swype on the iphone and it will be crack. Iphone that is,positive,apple
-126404574230740992,@Apple will be adding more carrier support to the iPhone 4S (just announced),positive,apple
-126402758403305474,Hilarious @youtube video - guy does a duet with @apple 's Siri. Pretty much sums up the love affair! http://t.co/8ExbnQjY,positive,apple
-126397179614068736,@RIM you made it too easy for me to switch to @Apple iPhone. See ya!,positive,apple
