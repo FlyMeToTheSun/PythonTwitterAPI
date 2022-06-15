@@ -200,7 +200,7 @@ elif ((NBResultLabels.count('positive') < NBResultLabels.count('neutral')) and (
 else:
     print("Overall Irrelevant Sentiment")
 
-print("Sentiment Scores: Positive =" + str(NBResultLabels.count('positive')/len(NBResultLabels))+". Negative = " + str(NBResultLabels.count('negative')/len(NBResultLabels))+".")
+print("Sentiment Scores: Positive = " + str(NBResultLabels.count('positive')/len(NBResultLabels))+". Negative = " + str(NBResultLabels.count('negative')/len(NBResultLabels))+".")
 
 #print("Neutral Sentiment Percentage = " + str(100*NBResultLabels.count('neutral')/len(NBResultLabels)) + "%")
 #print("Irrelevant Sentiment Percentage = " + str(100*NBResultLabels.count('irrelevant')/len(NBResultLabels)) + "%")
